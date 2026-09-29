@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RAG Intelligence Workspace</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+
+<div class="background-grid"></div>
+<div class="glow glow-one"></div>
+<div class="glow glow-two"></div>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                <span>✦</span>
+            </div>
+
+            <div>
+                <h2>RAG<span>AI</span></h2>
+                <p>Knowledge Workspace</p>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="section-label">SYSTEM</p>
+
+            <div class="system-card">
+                <div class="status-dot"></div>
+
+                <div>
+                    <strong>System Online</strong>
+                    <small>RAG engine ready</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <p class="section-label">PIPELINE</p>
+
+            <div class="pipeline">
+
+                <div class="pipeline-item active">
+                    <div class="pipeline-icon">01</div>
+                    <div>
+                        <strong>Documents</strong>
+                        <small>Knowledge source</small>
+                    </div>
+                </div>
+
+                <div class="pipeline-line"></div>
+
+                <div class="pipeline-item active">
+                    <div class="pipeline-icon">02</div>
+                    <div>
+                        <strong>Embeddings</strong>
+                        <small>Vector representation</small>
+                    </div>
+                </div>
+
+                <div class="pipeline-line"></div>
+
+                <div class="pipeline-item active">
+                    <div class="pipeline-icon">03</div>
+                    <div>
+                        <strong>Retrieval</strong>
+                        <small>Context search</small>
+                    </div>
+                </div>
+
+                <div class="pipeline-line"></div>
+
+                <div class="pipeline-item active">
+                    <div class="pipeline-icon">04</div>
+                    <div>
+                        <strong>Generation</strong>
+                        <small>Grok response</small>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="tech-pill">
+                <span>●</span> ChromaDB
+            </div>
+
+            <div class="tech-pill">
+                <span>●</span> Groq
+            </div>
+
+            <div class="tech-pill">
+                <span>●</span> FastAPI
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+                <p class="eyebrow">AI KNOWLEDGE ENGINE</p>
+
+                <h1>
+                    Ask your
+                    <span>documents.</span>
+                </h1>
+
+                <p class="subtitle">
+                    Search your indexed knowledge base and get answers
+                    grounded in your documents.
+                </p>
+            </div>
+
+            <div class="top-status">
+                <div class="live-indicator"></div>
+                LIVE
+            </div>
+
+        </header>
+
+
+        <!-- QUERY AREA -->
+        <section class="workspace">
+
+            <div class="query-card">
+
+                <div class="query-header">
+
+                    <div>
+                        <span class="query-label">YOUR QUESTION</span>
+
+                        <h3>
+                            What would you like to know?
+                        </h3>
+                    </div>
+
+                    <div class="model-badge">
+                        <span>✦</span>
+                        RAG + GROQ
+                    </div>
+
+                </div>
+
+
+                <div class="input-wrapper">
+
+                    <textarea
+                        id="question"
+                        placeholder="Ask something about your uploaded documents..."
+                        rows="4"
+                    ></textarea>
+
+                    <button id="askBtn" onclick="askQuestion()">
+
+                        <span id="btnText">Ask AI</span>
+
+                        <span id="btnIcon">→</span>
+
+                    </button>
+
+                </div>
+
+
+                <div class="suggestions">
+
+                    <button onclick="setQuestion('What is this document about?')">
+                        <span>⌁</span>
+                        Summarize document
+                    </button>
+
+                    <button onclick="setQuestion('What are the main points?')">
+                        <span>✦</span>
+                        Main points
+                    </button>
+
+                    <button onclick="setQuestion('What important information should I know?')">
+                        <span>◈</span>
+                        Key information
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANSWER -->
+            <div id="answerSection" class="answer-section hidden">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="query-label">AI RESPONSE</span>
+                        <h2>Generated Answer</h2>
+                    </div>
+
+                    <button class="copy-btn" onclick="copyAnswer()">
+                        Copy answer
+                    </button>
+
+                </div>
+
+
+                <div class="answer-card">
+
+                    <div class="answer-top">
+
+                        <div class="ai-avatar">
+                            ✦
+                        </div>
+
+                        <div>
+                            <strong>RAG Intelligence</strong>
+                            <small>Grounded response</small>
+                        </div>
+
+                        <div class="verified">
+                            <span>✓</span>
+                            Context verified
+                        </div>
+
+                    </div>
+
+
+                    <div id="answer" class="answer-content">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- SOURCES -->
+            <div id="sourcesSection" class="sources-section hidden">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="query-label">RETRIEVED CONTEXT</span>
+                        <h2>Source Evidence</h2>
+                    </div>
+
+                    <span id="sourceCount" class="source-count">
+                        0 sources
+                    </span>
+
+                </div>
+
+
+                <div id="sources" class="sources-grid">
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+function setQuestion(text) {
+    document.getElementById("question").value = text;
+    document.getElementById("question").focus();
+}
+
+
+async function askQuestion() {
+
+    const questionInput = document.getElementById("question");
+    const question = questionInput.value.trim();
+
+    if (!question) {
+        questionInput.focus();
+        return;
+    }
+
+    const button = document.getElementById("askBtn");
+    const btnText = document.getElementById("btnText");
+    const btnIcon = document.getElementById("btnIcon");
+
+    const answerSection = document.getElementById("answerSection");
+    const sourcesSection = document.getElementById("sourcesSection");
+
+    const answerBox = document.getElementById("answer");
+    const sourcesBox = document.getElementById("sources");
+
+    button.disabled = true;
+
+    btnText.textContent = "Thinking";
+    btnIcon.textContent = "•••";
+
+    answerSection.classList.remove("hidden");
+    sourcesSection.classList.add("hidden");
+
+    answerBox.innerHTML = `
+        <div class="loading">
+            <div class="loading-orbit"></div>
+            <div>
+                <strong>Searching your knowledge base...</strong>
+                <p>Retrieving relevant context and generating an answer.</p>
+            </div>
+        </div>
+    `;
+
+
+    try {
+
+        const response = await fetch("/rag/query", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                question: question
+            })
+
+        });
+
+
+        const data = await response.json();
+
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail || "Something went wrong."
+            );
+        }
+
+
+        answerBox.textContent = data.answer || "No answer returned.";
+
+
+        renderSources(data.sources || []);
+
+
+    } catch (error) {
+
+        answerBox.innerHTML = `
+            <div class="error-box">
+                <strong>Something went wrong</strong>
+                <p>${escapeHtml(error.message)}</p>
+            </div>
+        `;
+
+    } finally {
+
+        button.disabled = false;
+
+        btnText.textContent = "Ask AI";
+        btnIcon.textContent = "→";
+
+    }
+}
+
+
+function renderSources(sources) {
+
+    const section = document.getElementById("sourcesSection");
+    const container = document.getElementById("sources");
+    const count = document.getElementById("sourceCount");
+
+    container.innerHTML = "";
+
+    count.textContent =
+        `${sources.length} source${sources.length === 1 ? "" : "s"}`;
+
+
+    if (!sources.length) {
+        section.classList.add("hidden");
+        return;
+    }
+
+
+    section.classList.remove("hidden");
+
+
+    sources.forEach((source, index) => {
+
+        const card = document.createElement("div");
+
+        card.className = "source-card";
+
+        card.innerHTML = `
+
+            <div class="source-number">
+                ${String(index + 1).padStart(2, "0")}
+            </div>
+
+            <div class="source-main">
+
+                <div class="source-title">
+                    ${escapeHtml(source.source || "Unknown document")}
+                </div>
+
+                <div class="source-meta">
+
+                    <span>
+                        Page ${source.page || "N/A"}
+                    </span>
+
+                    <span>
+                        Chunk ${source.chunk ?? "N/A"}
+                    </span>
+
+                    <span>
+                        Distance ${Number(source.distance || 0).toFixed(4)}
+                    </span>
+
+                </div>
+
+                <p>
+                    ${escapeHtml(source.text || "")}
+                </p>
+
+            </div>
+
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+function copyAnswer() {
+
+    const answer = document.getElementById("answer").innerText;
+
+    navigator.clipboard.writeText(answer);
+
+}
+
+
+function escapeHtml(text) {
+
+    const div = document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+document.getElementById("question").addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            (event.ctrlKey || event.metaKey)
+        ) {
+            askQuestion();
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+My name is Nimra.
+
+I am an Intermediate student learning Data Science and Artificial Intelligence.
+
+I am learning Python, Machine Learning, Deep Learning, LLMs, FastAPI, and Excel.
+
+My goal is to gain practical experience and build AI and Data Science projects.
